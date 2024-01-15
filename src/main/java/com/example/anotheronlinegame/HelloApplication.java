@@ -20,6 +20,9 @@ import java.util.List;
 
 public class HelloApplication extends Application {
 
+    final int fieldWidth = 256;
+    final int fieldHeight = 256;
+
     final BooleanProperty upMovement = new SimpleBooleanProperty(false);
     final BooleanProperty downMovement = new SimpleBooleanProperty(false);
     final BooleanProperty leftMovement = new SimpleBooleanProperty(false);
@@ -53,7 +56,7 @@ public class HelloApplication extends Application {
         person.setOnTakenObjectIntersect(new EventHandler<intersectEvent>() {
             @Override
             public void handle(intersectEvent intersectEvent) {
-                removeTakenObject(pane2,intersectEvent.getIntersectedObject());
+                pane2.getChildren().remove(intersectEvent.getIntersectedObject());
             }
         });
 
@@ -97,12 +100,15 @@ public class HelloApplication extends Application {
         pane1.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                int objectID = apples.indexOf(person.takeChoozenTakenObjectNode());
-                if(objectID>-1){
-                    apples.get(objectID).setX(mouseEvent.getX());
-                    apples.get(objectID).setY(mouseEvent.getY());
-                    pane1.getChildren().add(apples.get(objectID));
+                System.out.println("a");
+                TakenObjectNode object = person.takeChoozenTakenObjectNode();
+                System.out.println(person);
+                if(object!=null&&!pane1.getChildren().contains(object)){
+                    object.setX(mouseEvent.getX());
+                    object.setY(mouseEvent.getY());
+                    pane1.getChildren().add(object);
                 }
+                System.out.println("c");
             }
         });
 
@@ -112,11 +118,9 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
         person.requestFocus();
+        System.out.println(person);
     }
 
-    private void removeTakenObject(Pane pane,TakenObjectNode cutedObject){
-        pane.getChildren().remove(cutedObject);
-    }
 
     public static void main(String[] args) {
         launch();
